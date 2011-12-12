@@ -1,0 +1,245 @@
+for dir in tools examples/standalone examples/api arch/arm/cpu/arm926ejs /home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs/ ; do \
+		make -C $dir _depend ; done
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/tools”
+make[1]: 对“_depend”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/tools”
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/examples/standalone”
+make[1]: 对“_depend”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/examples/standalone”
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/examples/api”
+make[1]: 对“_depend”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/examples/api”
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs”
+make[1]: 对“_depend”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs”
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs”
+make[1]: 对“_depend”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs”
+make -C tools all
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/tools”
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/tools”
+make -C examples/standalone all
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/examples/standalone”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/examples/standalone”
+make -C examples/api all
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/examples/api”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/examples/api”
+make -C arch/arm/cpu/arm926ejs start.o
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs”
+make[1]: “start.o”是最新的。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs”
+make -C lib/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/lib”
+make[1]: “libgeneric.a”是最新的。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/lib”
+make -C lib/lzma/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/lib/lzma”
+arm-linux-ar crv liblzma.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/lib/lzma”
+make -C lib/lzo/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/lib/lzo”
+arm-linux-ar crv liblzo.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/lib/lzo”
+make -C arch/arm/cpu/arm926ejs/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs”
+make -C arch/arm/cpu/arm926ejs/at91/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs/at91”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/arch/arm/cpu/arm926ejs/at91”
+make -C arch/arm/lib/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/arch/arm/lib”
+arm-linux-gcc  -g  -Os   -fno-common -ffixed-r8 -msoft-float  -D__KERNEL__ -DTEXT_BASE=0x23f00000 -I/home/jionfull/u-boot-2010.06/include -fno-builtin -ffreestanding -nostdinc -isystem /opt/FriendlyARM/toolschain/4.4.3/lib/gcc/arm-none-linux-gnueabi/4.4.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv5te  -Wall -Wstrict-prototypes -fno-stack-protector   \
+	-o board.o board.c -c
+arm-linux-ar crv libarm.a board.o bootm.o cache.o cache-cp15.o interrupts.o reset.o
+r - board.o
+r - bootm.o
+r - cache.o
+r - cache-cp15.o
+r - interrupts.o
+r - reset.o
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/arch/arm/lib”
+make -C fs/cramfs/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/fs/cramfs”
+arm-linux-ar crv libcramfs.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/fs/cramfs”
+make -C fs/fat/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/fs/fat”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/fs/fat”
+make -C fs/fdos/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/fs/fdos”
+arm-linux-ar crv libfdos.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/fs/fdos”
+make -C fs/jffs2/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/fs/jffs2”
+arm-linux-ar crv libjffs2.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/fs/jffs2”
+make -C fs/reiserfs/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/fs/reiserfs”
+arm-linux-ar crv libreiserfs.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/fs/reiserfs”
+make -C fs/ext2/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/fs/ext2”
+arm-linux-ar crv libext2fs.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/fs/ext2”
+make -C fs/yaffs2/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/fs/yaffs2”
+arm-linux-ar crv libyaffs2.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/fs/yaffs2”
+make -C fs/ubifs/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/fs/ubifs”
+arm-linux-ar crv libubifs.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/fs/ubifs”
+make -C net/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/net”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/net”
+make -C disk/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/disk”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/disk”
+make -C drivers/bios_emulator/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/bios_emulator”
+arm-linux-ar crv libatibiosemu.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/bios_emulator”
+make -C drivers/block/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/block”
+arm-linux-ar crv libblock.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/block”
+make -C drivers/dma/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/dma”
+arm-linux-ar crv libdma.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/dma”
+make -C drivers/fpga/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/fpga”
+arm-linux-ar crv libfpga.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/fpga”
+make -C drivers/gpio/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/gpio”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/gpio”
+make -C drivers/hwmon/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/hwmon”
+arm-linux-ar crv libhwmon.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/hwmon”
+make -C drivers/i2c/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/i2c”
+arm-linux-ar crv libi2c.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/i2c”
+make -C drivers/input/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/input”
+arm-linux-ar crv libinput.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/input”
+make -C drivers/misc/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/misc”
+arm-linux-ar crv libmisc.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/misc”
+make -C drivers/mmc/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/mmc”
+arm-linux-ar crv libmmc.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/mmc”
+make -C drivers/mtd/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/mtd”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/mtd”
+make -C drivers/mtd/nand/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/mtd/nand”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/mtd/nand”
+make -C drivers/mtd/onenand/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/mtd/onenand”
+arm-linux-ar crv libonenand.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/mtd/onenand”
+make -C drivers/mtd/ubi/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/mtd/ubi”
+arm-linux-ar crv libubi.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/mtd/ubi”
+make -C drivers/mtd/spi/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/mtd/spi”
+arm-linux-ar crv libspi_flash.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/mtd/spi”
+make -C drivers/net/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/net”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/net”
+make -C drivers/net/phy/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/net/phy”
+arm-linux-ar crv libphy.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/net/phy”
+make -C drivers/pci/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/pci”
+arm-linux-ar crv libpci.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/pci”
+make -C drivers/pcmcia/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/pcmcia”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/pcmcia”
+make -C drivers/power/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/power”
+arm-linux-ar crv libpower.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/power”
+make -C drivers/spi/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/spi”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/spi”
+make -C drivers/rtc/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/rtc”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/rtc”
+make -C drivers/serial/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/serial”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/serial”
+make -C drivers/twserial/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/twserial”
+arm-linux-ar crv libtws.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/twserial”
+make -C drivers/usb/gadget/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/usb/gadget”
+arm-linux-ar crv libusb_gadget.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/usb/gadget”
+make -C drivers/usb/host/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/usb/host”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/usb/host”
+make -C drivers/usb/musb/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/usb/musb”
+arm-linux-ar crv libusb_musb.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/usb/musb”
+make -C drivers/usb/phy/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/usb/phy”
+arm-linux-ar crv libusb_phy.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/usb/phy”
+make -C drivers/video/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/video”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/video”
+make -C drivers/watchdog/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/drivers/watchdog”
+arm-linux-ar crv libwatchdog.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/drivers/watchdog”
+make -C common/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/common”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/common”
+make -C lib/libfdt/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/lib/libfdt”
+arm-linux-ar crv libfdt.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/lib/libfdt”
+make -C api/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/api”
+arm-linux-ar crv libapi.a 
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/api”
+make -C post/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/post”
+make[1]: 对“all”无需做任何事。
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/post”
+make -C board/atmel/at91sam9263ek/
+make[1]: 进入目录“/home/jionfull/u-boot-2010.06/board/atmel/at91sam9263ek”
+arm-linux-gcc  -g  -Os   -fno-common -ffixed-r8 -msoft-float  -D__KERNEL__ -DTEXT_BASE=0x23f00000 -I/home/jionfull/u-boot-2010.06/include -fno-builtin -ffreestanding -nostdinc -isystem /opt/FriendlyARM/toolschain/4.4.3/lib/gcc/arm-none-linux-gnueabi/4.4.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv5te  -Wall -Wstrict-prototypes -fno-stack-protector   \
+	-o at91sam9263ek.o at91sam9263ek.c -c
+make[1]: 离开目录“/home/jionfull/u-boot-2010.06/board/atmel/at91sam9263ek”
