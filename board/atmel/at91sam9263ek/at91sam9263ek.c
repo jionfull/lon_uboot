@@ -41,6 +41,11 @@
 #endif
 #include <netdev.h>
 
+#include "tl16c752_reg.h"
+#define BAND       38400
+#define BASEADDR  (0x30000000)
+#define D5 AT91C_PIN_PA(25)
+
 DECLARE_GLOBAL_DATA_PTR;
 
 /* ------------------------------------------------------------------------- */
@@ -75,11 +80,7 @@ static void at91sam9263ek_nand_hw_init(void)
 		&smc->cs[3].cycle);
 	writel(AT91_SMC_MODE_RM_NRD | AT91_SMC_MODE_WM_NWE |
 		AT91_SMC_MODE_EXNW_DISABLE |
-#ifdef CONFIG_SYS_NAND_DBW_16
-		       AT91_SMC_MODE_DBW_16 |
-#else /* CONFIG_SYS_NAND_DBW_8 */
 		       AT91_SMC_MODE_DBW_8 |
-#endif
 		       AT91_SMC_MODE_TDF_CYCLE(2),
 		&smc->cs[3].mode);
 
@@ -244,23 +245,53 @@ void lcd_show_board_info(void)
 #endif /* CONFIG_LCD_INFO */
 #endif
 
+void Tl16c752_Send(unsigned char val)
+{
+    while((READREG(BASEADDR+FRR)&0x01)==0)
+    {
+    }
+
+    WRITEREG(BASEADDR+BUF,val);
+
+}
+
+unsigned char Tl16c752_RxChk()
+{
+    if(READREG(BASEADDR+LSR)&BIT_RX_NOEMPTY)
+    {
+         return 1;
+    }
+    return 0;
+}
+
+void UartPuts(const char *pStr)
+{
+	const char *p;
+
+	for (p = pStr; *p; p++)
+		Tl16c752_Send(*p);
+}
+
 int board_init(void)
 {
 	/* Enable Ctrlc */
+    UartPuts("board_init_Run\r\n");
 	console_init_f();
+    UartPuts("console_init_f_RunOk\r\n");
 
 	/* arch number of AT91SAM9263EK-Board */
 	gd->bd->bi_arch_number = MACH_TYPE_AT91SAM9263EK;
 	/* adress of boot parameters */
 	gd->bd->bi_boot_params = PHYS_SDRAM + 0x100;
 
+
 	at91_serial_hw_init();
+    UartPuts("at91_serial_hw_init_RunOk\r\n");
 #ifdef CONFIG_CMD_NAND
 	at91sam9263ek_nand_hw_init();
+    while(1);
 #endif
 #ifdef CONFIG_HAS_DATAFLASH
-	at91_set_pio_output(AT91_PIO_PORTE, 20, 1);	/* select spi0 clock */
-	at91_spi0_hw_init(1 << 0);
 #endif
 #ifdef CONFIG_MACB
 	at91sam9263ek_macb_hw_init();
@@ -270,7 +301,9 @@ int board_init(void)
 #endif
 #ifdef CONFIG_LCD
 	at91sam9263ek_lcd_hw_init();
+    UartPuts("at91sam9263ek_lcd_hw_init ok\r\n");
 #endif
+    UartPuts("board_init_exit\r\n");
 	return 0;
 }
 

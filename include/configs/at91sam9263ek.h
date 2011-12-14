@@ -70,9 +70,9 @@
 
 /* LED */
 #define CONFIG_AT91_LED
-#define	CONFIG_RED_LED		AT91_PIO_PORTB, 7	/* the power led */
-#define	CONFIG_GREEN_LED	AT91_PIO_PORTB, 8	/* the user1 led */
-#define	CONFIG_YELLOW_LED	AT91_PIO_PORTC, 29	/* the user2 led */
+#define	CONFIG_RED_LED		AT91_PIO_PORTB, 30	/* the power led */
+#define	CONFIG_GREEN_LED	AT91_PIO_PORTA, 25	/* the user1 led */
+#define	CONFIG_YELLOW_LED	AT91_PIO_PORTA, 25	/* the user2 led */
 
 #define CONFIG_BOOTDELAY	3
 
@@ -262,7 +262,7 @@
 /* our CLE is AD22 */
 #define CONFIG_SYS_NAND_MASK_CLE		(1 << 22)
 #define CONFIG_SYS_NAND_ENABLE_PIN	AT91_PIO_PORTD, 15
-#define CONFIG_SYS_NAND_READY_PIN	AT91_PIO_PORTA, 22
+#define CONFIG_SYS_NAND_READY_PIN	AT91_PIO_PORTB, 19
 /*
 #define CONFIG_SYS_NAND_ENABLE_PIN  AT91_PIN_PD15
 #define CONFIG_SYS_NAND_READY_PIN  AT91_PIN_PA22

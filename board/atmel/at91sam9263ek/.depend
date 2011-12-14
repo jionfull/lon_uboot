@@ -53,7 +53,7 @@ at91sam9263ek.o: at91sam9263ek.c \
  /home/jionfull/u-boot-2010.06/include/asm/memory.h \
  /home/jionfull/u-boot-2010.06/include/lcd.h \
  /home/jionfull/u-boot-2010.06/include/atmel_lcdc.h \
- /home/jionfull/u-boot-2010.06/include/netdev.h \
+ /home/jionfull/u-boot-2010.06/include/netdev.h tl16c752_reg.h \
  /home/jionfull/u-boot-2010.06/include/nand.h \
  /home/jionfull/u-boot-2010.06/include/linux/mtd/compat.h \
  /home/jionfull/u-boot-2010.06/include/linux/mtd/mtd.h \

@@ -3743,4 +3743,6 @@ backup:
 	F=`basename $(TOPDIR)` ; cd .. ; \
 	gtar --force-local -zcvf `LC_ALL=C date "+$$F-%Y-%m-%d-%T.tar.gz"` $$F
 
+www:
+	cp u-boot.bin /var/www/html/
 #########################################################################
