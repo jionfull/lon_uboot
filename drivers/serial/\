@@ -1,0 +1,40 @@
+/*
+ * COM1 NS16550 support
+ * originally from linux source (arch/powerpc/boot/ns16550.c)
+ * modified to use CONFIG_SYS_ISA_MEM and new defines
+ */
+
+#include <config.h>
+#include <watchdog.h>
+#include <linux/types.h>
+#include <asm/io.h>
+#include "tl16c752_reg.h"
+
+
+#define serial_out(x,y) writeb(x,y)
+#define serial_in(y) 	readb(y)
+#define BASEADDR  (0x30000000)
+
+void NS16550_init ()
+{
+}
+
+
+void NS16550_putc (NS16550_t com_port, char c)
+{
+	while ((serial_in(BASEADDR+FRR) & 0x01) == 0);
+	serial_out(c, BASEADDR+BUF);
+}
+
+char NS16550_getc ()
+{
+	while ((serial_in(BASEADDR+LSR) & BIT_RX_NOEMPTY) == 0) {
+	}
+	return serial_in(BASEADDR+BUF);
+}
+
+int NS16550_tstc (NS16550_t com_port)
+{
+	return ((serial_in(BASEADDR+LSR) & BIT_RX_NOEMPTY) != 0);
+}
+

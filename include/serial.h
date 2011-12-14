@@ -23,6 +23,7 @@ extern struct serial_device serial_smc_device;
 extern struct serial_device serial_scc_device;
 extern struct serial_device * default_serial_console (void);
 
+extern struct serial_device serial_lon9263_device;
 #if defined(CONFIG_405GP) || defined(CONFIG_405CR) || defined(CONFIG_440) || \
     defined(CONFIG_405EP) || defined(CONFIG_405EZ) || defined(CONFIG_405EX) || \
     defined(CONFIG_MPC5xxx) || defined(CONFIG_MPC83xx) || \

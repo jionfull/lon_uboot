@@ -27,7 +27,6 @@ LIB	:= $(obj)libserial.a
 
 COBJS-$(CONFIG_ALTERA_UART) += altera_uart.o
 COBJS-$(CONFIG_ALTERA_JTAG_UART) += altera_jtag_uart.o
-COBJS-$(CONFIG_ARM_DCC) += arm_dcc.o
 COBJS-$(CONFIG_AT91RM9200_USART) += at91rm9200_usart.o
 COBJS-$(CONFIG_ATMEL_USART) += atmel_usart.o
 COBJS-$(CONFIG_MCFUART) += mcfuart.o
@@ -57,6 +56,7 @@ COBJS-$(CONFIG_XILINX_UARTLITE) += serial_xuartlite.o
 COBJS-$(CONFIG_SCIF_CONSOLE) += serial_sh.o
 COBJS-$(CONFIG_USB_TTY) += usbtty.o
 
+$(COBJS-y) += ti16c752.c
 COBJS	:= $(sort $(COBJS-y))
 SRCS	:= $(COBJS:.o=.c)
 OBJS	:= $(addprefix $(obj),$(COBJS))
