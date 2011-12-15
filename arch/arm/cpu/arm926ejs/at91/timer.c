@@ -77,6 +77,7 @@ int timer_init(void)
 
 	timer_freq = get_mck_clk_rate() >> 4;
 
+     UartPuts("timer_init_exit");
 	return 0;
 }
 
