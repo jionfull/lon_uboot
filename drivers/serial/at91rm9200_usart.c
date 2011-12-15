@@ -47,6 +47,7 @@ DECLARE_GLOBAL_DATA_PTR;
 #error must define one of CONFIG_DBGU or CONFIG_USART0 or CONFIG_USART1
 #endif
 
+extern void UartPuts(const char *pStr);
 /* ggi thunder */
 #ifdef CONFIG_DBGU
 AT91PS_USART us = (AT91PS_USART) AT91C_BASE_DBGU;
@@ -71,6 +72,7 @@ void serial_setbrg (void)
 int serial_init (void)
 {
 	/* make any port initializations specific to this port */
+    UartPuts("serial_init");
 #ifdef CONFIG_DBGU
 	*AT91C_PIOA_PDR = AT91C_PA31_DTXD | AT91C_PA30_DRXD;	/* PA 31 & 30 */
 	*AT91C_PMC_PCER = 1 << AT91C_ID_SYS;	/* enable clock */

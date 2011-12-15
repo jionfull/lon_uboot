@@ -37,15 +37,44 @@
 
 #include <common.h>
 #include <asm/proc-armv/ptrace.h>
+#include "tl16c752_reg.h"
 
 #ifdef CONFIG_USE_IRQ
 DECLARE_GLOBAL_DATA_PTR;
+
+void Tl16c752_Send(unsigned char val)
+{
+    while((READREG(BASEADDR+FRR)&0x01)==0)
+    {
+    }
+
+    WRITEREG(BASEADDR+BUF,val);
+
+}
+
+void UartPuts(const char *pStr)
+{
+	const char *p;
+	for (p = pStr; *p; p++)
+		Tl16c752_Send(*p);
+}
+
+
+unsigned char Tl16c752_RxChk()
+{
+    if(READREG(BASEADDR+LSR)&BIT_RX_NOEMPTY)
+    {
+         return 1;
+    }
+    return 0;
+}
 
 int interrupt_init (void)
 {
 	/*
 	 * setup up stacks if necessary
 	 */
+    UartPuts("interrupts_init is running");
 	IRQ_STACK_START = _armboot_start - CONFIG_SYS_MALLOC_LEN - CONFIG_SYS_GBL_DATA_SIZE - 4;
 	FIQ_STACK_START = IRQ_STACK_START - CONFIG_STACKSIZE_IRQ;
 

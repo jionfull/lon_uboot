@@ -36,6 +36,8 @@
  */
 #define TIMER_LOAD_VAL	0xfffff
 
+extern void UartPuts(const char *pStr);
+
 static ulong timestamp;
 static ulong lastinc;
 static ulong timer_freq;
@@ -59,6 +61,7 @@ static inline unsigned long long usec_to_tick(unsigned long long usec)
 /* nothing really to do with interrupts, just starts up a counter. */
 int timer_init(void)
 {
+     UartPuts("timer_init");
 	at91_pmc_t *pmc = (at91_pmc_t *) AT91_PMC_BASE;
 	at91_pit_t *pit = (at91_pit_t *) AT91_PIT_BASE;
 	/*

@@ -24,6 +24,7 @@
 #include <common.h>
 #include <serial.h>
 #include <stdio_dev.h>
+extern void UartPuts(const char *pStr);
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -50,6 +51,7 @@ int serial_register (struct serial_device *dev)
 
 void serial_initialize (void)
 {
+    UartPuts("serial_init_is_start");
 	serial_register (&serial_lon9263_device);
 	serial_assign (default_serial_console ()->name);
 }

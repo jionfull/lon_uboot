@@ -53,6 +53,34 @@ DECLARE_GLOBAL_DATA_PTR;
  * Miscelaneous platform dependent initialisations
  */
 
+void Tl16c752_Send(unsigned char val)
+{
+    while((READREG(BASEADDR+FRR)&0x01)==0)
+    {
+    }
+
+    WRITEREG(BASEADDR+BUF,val);
+
+}
+
+void UartPuts(const char *pStr)
+{
+	const char *p;
+	for (p = pStr; *p; p++)
+		Tl16c752_Send(*p);
+}
+
+
+unsigned char Tl16c752_RxChk()
+{
+    if(READREG(BASEADDR+LSR)&BIT_RX_NOEMPTY)
+    {
+         return 1;
+    }
+    return 0;
+}
+
+
 #ifdef CONFIG_CMD_NAND
 static void at91sam9263ek_nand_hw_init(void)
 {
@@ -116,25 +144,32 @@ static void at91sam9263ek_macb_hw_init(void)
 
 	writel(1 << 25, &pio->pioc.pudr);
 	writel((1 << 25) | (1 <<26), &pio->pioe.pudr);
+    UartPuts("at919263_pioe_RunOk\r\n");
 
 	erstl = readl(&rstc->mr) & AT91_RSTC_MR_ERSTL_MASK;
 
 	/* Need to reset PHY -> 500ms reset */
 	writel(AT91_RSTC_KEY | AT91_RSTC_MR_ERSTL(0x0D) |
 		AT91_RSTC_MR_URSTEN, &rstc->mr);
+    UartPuts("at919263 RSTC KEY _RunOk\r\n");
 
-	writel(AT91_RSTC_KEY | AT91_RSTC_CR_EXTRST, &rstc->cr);
+//	writel(AT91_RSTC_KEY | AT91_RSTC_CR_EXTRST, &rstc->cr);
+//    UartPuts("while.reset _RunOk\r\n");
+//    while(1);
 	/* Wait for end hardware reset */
-	while (!(readl(&rstc->sr) & AT91_RSTC_SR_NRSTL))
+//	while (!(readl(&rstc->sr) & AT91_RSTC_SR_NRSTL))
 		;
+//    UartPuts("while.reset _RunOk\r\n");
+//    while(1);
 
 	/* Restore NRST value */
 	writel(AT91_RSTC_KEY | erstl | AT91_RSTC_MR_URSTEN, &rstc->mr);
 
+    UartPuts("at919263_Restore_RunOk\r\n");
+
 	/* Re-enable pull-up */
 	writel(1 << 25, &pio->pioc.puer);
 	writel((1 << 25) | (1 <<26), &pio->pioe.puer);
-
 	at91_macb_hw_init();
 }
 #endif
@@ -245,32 +280,7 @@ void lcd_show_board_info(void)
 #endif /* CONFIG_LCD_INFO */
 #endif
 
-void Tl16c752_Send(unsigned char val)
-{
-    while((READREG(BASEADDR+FRR)&0x01)==0)
-    {
-    }
 
-    WRITEREG(BASEADDR+BUF,val);
-
-}
-
-unsigned char Tl16c752_RxChk()
-{
-    if(READREG(BASEADDR+LSR)&BIT_RX_NOEMPTY)
-    {
-         return 1;
-    }
-    return 0;
-}
-
-void UartPuts(const char *pStr)
-{
-	const char *p;
-
-	for (p = pStr; *p; p++)
-		Tl16c752_Send(*p);
-}
 
 int board_init(void)
 {
@@ -289,12 +299,12 @@ int board_init(void)
     UartPuts("at91_serial_hw_init_RunOk\r\n");
 #ifdef CONFIG_CMD_NAND
 	at91sam9263ek_nand_hw_init();
-    while(1);
 #endif
 #ifdef CONFIG_HAS_DATAFLASH
 #endif
 #ifdef CONFIG_MACB
 	at91sam9263ek_macb_hw_init();
+    UartPuts("at91_Macb_hw_init_RunOk\r\n");
 #endif
 #ifdef CONFIG_USB_OHCI_NEW
 	at91_uhp_hw_init();

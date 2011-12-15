@@ -127,6 +127,8 @@ static NS16550_t serial_ports[4] = {
 
 #endif /* CONFIG_SERIAL_MULTI */
 
+extern void UartPuts(const char *pStr);
+
 static int calc_divisor (NS16550_t port)
 {
 	/* Compute divisor value. Normally, we should simply return:
@@ -143,6 +145,7 @@ int serial_init (void)
 {
 	int clock_divisor;
 
+    UartPuts("serial.c is run");
 #ifdef CONFIG_NS87308
 	initialise_ns87308();
 #endif

@@ -86,6 +86,7 @@ extern void rtl8019_get_enetaddr (uchar * addr);
 #include <i2c.h>
 #endif
 
+extern void UartPuts(const char *pStr);
 
 /************************************************************************
  * Coloured LED functionality
@@ -124,6 +125,7 @@ void blue_LED_off(void) __attribute__((weak, alias("__blue_LED_off")));
 #endif
 static int init_baudrate (void)
 {
+    UartPuts("init_baudrate_run");
 	char tmp[64];	/* long enough for environment variables */
 	int i = getenv_r ("baudrate", tmp, sizeof (tmp));
 	gd->bd->bi_baudrate = gd->baudrate = (i > 0)
@@ -291,6 +293,7 @@ void start_armboot (void)
 
 	for (init_fnc_ptr = init_sequence; *init_fnc_ptr; ++init_fnc_ptr) {
 		if ((*init_fnc_ptr)() != 0) {
+            UartPuts("system init err");
 			hang ();
 		}
 	}

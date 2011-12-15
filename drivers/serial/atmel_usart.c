@@ -42,6 +42,8 @@
 
 #include "atmel_usart.h"
 
+extern void UartPuts(const char *pStr);
+
 DECLARE_GLOBAL_DATA_PTR;
 
 void serial_setbrg(void)
@@ -61,6 +63,7 @@ void serial_setbrg(void)
 
 int serial_init(void)
 {
+    UartPuts("serial_init_is run");
 	usart3_writel(CR, USART3_BIT(RSTRX) | USART3_BIT(RSTTX));
 
 	serial_setbrg();

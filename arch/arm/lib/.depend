@@ -221,7 +221,8 @@ interrupts.o: interrupts.c /home/jionfull/u-boot-2010.06/include/common.h \
  /home/jionfull/u-boot-2010.06/include/asm/u-boot-arm.h \
  /home/jionfull/u-boot-2010.06/include/net.h \
  /home/jionfull/u-boot-2010.06/include/u-boot/crc.h \
- /home/jionfull/u-boot-2010.06/include/asm/proc-armv/ptrace.h
+ /home/jionfull/u-boot-2010.06/include/asm/proc-armv/ptrace.h \
+ tl16c752_reg.h
 reset.o: reset.c /home/jionfull/u-boot-2010.06/include/common.h \
  /home/jionfull/u-boot-2010.06/include/config.h \
  /home/jionfull/u-boot-2010.06/include/config_defaults.h \
