@@ -40,11 +40,45 @@
 # define USART_BASE	USART3_BASE
 #endif
 
-#include "atmel_usart.h"
 
-extern void UartPuts(const char *pStr);
+#include "tl16c752_reg.h"
+
+#define serial_out(x,y) writeb(x,y)
+#define serial_in(y) 	readb(y)
+#define BASEADDR  (0x30000000)
 
 DECLARE_GLOBAL_DATA_PTR;
+
+void lonPlat_init ()
+{
+}
+
+
+void lonPlat_putc ( char c)
+{
+	while ((serial_in(BASEADDR+FRR) & 0x01) == 0);
+	serial_out(c, BASEADDR+BUF);
+}
+
+int lonPlat_getc ()
+{
+	while ((serial_in(BASEADDR+LSR) & BIT_RX_NOEMPTY) == 0) {
+	}
+	return serial_in(BASEADDR+BUF);
+}
+
+int lonPlat_tstc ()
+{
+	return ((serial_in(BASEADDR+LSR) & BIT_RX_NOEMPTY) != 0);
+}
+
+static int lon9263_init(void)
+{
+}
+static void lon9263_setbrg(void)
+{
+}
+
 
 void serial_setbrg(void)
 {
@@ -56,25 +90,11 @@ void serial_setbrg(void)
 	 * Baud Rate = --------------
 	 *                16 * CD
 	 */
-	usart_hz = get_usart_clk_rate(USART_ID);
-	divisor = (usart_hz / 16 + gd->baudrate / 2) / gd->baudrate;
-	usart3_writel(BRGR, USART3_BF(CD, divisor));
 }
 
 int serial_init(void)
 {
     UartPuts("serial_init_is run\r\n");
-	usart3_writel(CR, USART3_BIT(RSTRX) | USART3_BIT(RSTTX));
-
-	serial_setbrg();
-
-	usart3_writel(CR, USART3_BIT(RXEN) | USART3_BIT(TXEN));
-	usart3_writel(MR, (USART3_BF(USART_MODE, USART3_USART_MODE_NORMAL)
-			   | USART3_BF(USCLKS, USART3_USCLKS_MCK)
-			   | USART3_BF(CHRL, USART3_CHRL_8)
-			   | USART3_BF(PAR, USART3_PAR_NONE)
-			   | USART3_BF(NBSTOP, USART3_NBSTOP_1)));
-
 	return 0;
 }
 
@@ -82,27 +102,35 @@ void serial_putc(char c)
 {
 	if (c == '\n')
 		serial_putc('\r');
+    return lonPlat_putc(c);
 
-	while (!(usart3_readl(CSR) & USART3_BIT(TXRDY))) ;
-	usart3_writel(THR, c);
 }
 
 void serial_puts(const char *s)
 {
-    UartPuts("serial_init_is run\r\n");
-    UartPuts(s);
 	while (*s)
 		serial_putc(*s++);
 }
 
 int serial_getc(void)
 {
-	while (!(usart3_readl(CSR) & USART3_BIT(RXRDY)))
-		 WATCHDOG_RESET();
-	return usart3_readl(RHR);
+	return lonPlat_getc();
 }
 
 int serial_tstc(void)
 {
-	return (usart3_readl(CSR) & USART3_BIT(RXRDY)) != 0;
+	return lonPlat_tstc();
 }
+/* 
+struct serial_device serial_lon9263_device =
+{
+	"serial_lon9263",
+	"Lon",
+	lon9263_init,
+	NULL,
+	lon9263_setbrg,
+	lon9263_getc,
+	lon9263_tstc,
+	lon9263_putc,
+	lon9263_puts,
+}; */

@@ -347,14 +347,7 @@ void start_armboot (void)
 	nand_init();		/* go init the NAND */
 #endif
 
-#if defined(CONFIG_CMD_ONENAND)
-	onenand_init();
-#endif
 
-#ifdef CONFIG_HAS_DATAFLASH
-	AT91F_DataflashInit();
-	dataflash_print_info();
-#endif
 
 	/* initialize environment */
 	env_relocate ();

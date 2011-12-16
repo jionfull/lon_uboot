@@ -28,7 +28,7 @@ void lonPlat_putc ( char c)
 	serial_out(c, BASEADDR+BUF);
 }
 
-char lonPlat_getc ()
+int lonPlat_getc ()
 {
 	while ((serial_in(BASEADDR+LSR) & BIT_RX_NOEMPTY) == 0) {
 	}
@@ -67,7 +67,7 @@ static int lon9263_getc(void)
 
 static int lon9263_tstc(void)
 {
-	return lonPlat_tstc(lon9263_INDEX);
+	return lonPlat_tstc();
 }
 
 

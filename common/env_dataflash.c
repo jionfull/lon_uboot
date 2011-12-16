@@ -68,7 +68,7 @@ int saveenv(void)
 int env_init(void)
 {
     
-             UartPuts("evn_init_run");
+            UartPuts("evn_init_run");
 			gd->env_addr  = (ulong)&default_environment[0];
 			gd->env_valid = 0;
 	        return (0);

@@ -32,7 +32,7 @@ static void lon9263_setbrg(void)
 
 static void lon9263_putc(const char c)
 {
-
+	return lonPlat_tstc();
 }
 
 static void lon9263_puts(const char *s)

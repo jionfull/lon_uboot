@@ -224,39 +224,12 @@ void set_default_env(void)
 
 void env_relocate (void)
 {
-#ifndef CONFIG_RELOC_FIXUP_WORKS
-	DEBUGF ("%s[%d] offset = 0x%lx\n", __FUNCTION__,__LINE__,
-		gd->reloc_off);
-#endif
 
-#ifdef CONFIG_AMIGAONEG3SE
-	enable_nvram();
-#endif
 
-#ifdef ENV_IS_EMBEDDED
-	/*
-	 * The environment buffer is embedded with the text segment,
-	 * just relocate the environment pointer
-	 */
-#ifndef CONFIG_RELOC_FIXUP_WORKS
-	env_ptr = (env_t *)((ulong)env_ptr + gd->reloc_off);
-#endif
-	DEBUGF ("%s[%d] embedded ENV at %p\n", __FUNCTION__,__LINE__,env_ptr);
-#else
-	/*
-	 * We must allocate a buffer for the environment
-	 */
-	env_ptr = (env_t *)malloc (CONFIG_ENV_SIZE);
-	DEBUGF ("%s[%d] malloced ENV at %p\n", __FUNCTION__,__LINE__,env_ptr);
-#endif
 
 	if (gd->env_valid == 0) {
-#if defined(CONFIG_GTH)	|| defined(CONFIG_ENV_IS_NOWHERE)	/* Environment not changable */
-		puts ("Using default environment\n\n");
-#else
 		puts ("*** Warning - bad CRC, using default environment\n\n");
 		show_boot_progress (-60);
-#endif
 		set_default_env();
 	}
 	else {
@@ -264,9 +237,6 @@ void env_relocate (void)
 	}
 	gd->env_addr = (ulong)&(env_ptr->data);
 
-#ifdef CONFIG_AMIGAONEG3SE
-	disable_nvram();
-#endif
 }
 
 #ifdef CONFIG_AUTO_COMPLETE

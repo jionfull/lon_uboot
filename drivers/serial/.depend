@@ -46,4 +46,4 @@ atmel_usart.o: atmel_usart.c \
  /home/jionfull/u-boot-2010.06/include/asm/sizes.h \
  /home/jionfull/u-boot-2010.06/include/asm/arch/at91sam9263.h \
  /home/jionfull/u-boot-2010.06/include/asm/arch/memory-map.h \
- atmel_usart.h
+ tl16c752_reg.h
