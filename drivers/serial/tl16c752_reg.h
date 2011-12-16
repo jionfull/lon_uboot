@@ -21,8 +21,6 @@
 #define  tl16c752_reg_INC
 
 #define WRITEREG(ADDR,VAL) (*(volatile unsigned char *)(ADDR))=(VAL)
-#define writeb(value, address) \
-	(*(volatile unsigned char *)(address)) = (value)
 #define READREG(ADDR) (*(volatile unsigned char *)(ADDR))
 #define BUF     0x00
 #define IER     0x01
