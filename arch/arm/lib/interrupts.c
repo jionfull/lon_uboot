@@ -42,6 +42,8 @@
 #ifdef CONFIG_USE_IRQ
 DECLARE_GLOBAL_DATA_PTR;
 
+#define BASEADDR  (0x30000000)
+
 void Tl16c752_Send(unsigned char val)
 {
     while((READREG(BASEADDR+FRR)&0x01)==0)

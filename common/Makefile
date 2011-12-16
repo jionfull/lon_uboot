@@ -176,6 +176,8 @@ CPPFLAGS += -I..
 all:	$(LIB) $(AOBJS)
 
 $(LIB): $(obj).depend $(OBJS)
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
 $(obj)env_embedded.o: $(src)env_embedded.c $(obj)../tools/envcrc

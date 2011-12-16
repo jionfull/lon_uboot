@@ -62,7 +62,7 @@ board.o: board.c /home/jionfull/u-boot-2010.06/include/common.h \
  /home/jionfull/u-boot-2010.06/include/linux/mtd/nand.h \
  /home/jionfull/u-boot-2010.06/include/linux/mtd/bbm.h \
  /home/jionfull/u-boot-2010.06/include/onenand_uboot.h \
- /home/jionfull/u-boot-2010.06/include/mmc.h
+ /home/jionfull/u-boot-2010.06/include/mmc.h tl16c752_reg.h
 bootm.o: bootm.c /home/jionfull/u-boot-2010.06/include/common.h \
  /home/jionfull/u-boot-2010.06/include/config.h \
  /home/jionfull/u-boot-2010.06/include/config_defaults.h \

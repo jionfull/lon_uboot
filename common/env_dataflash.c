@@ -36,6 +36,7 @@ extern int write_dataflash (unsigned long addr_dest, unsigned long addr_src,
 extern int AT91F_DataflashInit (void);
 extern uchar default_environment[];
 
+extern void UartPuts(const char *pStr);
 
 uchar env_get_char_spec (int index)
 {
@@ -66,33 +67,9 @@ int saveenv(void)
  */
 int env_init(void)
 {
-	ulong crc, len, new;
-	unsigned off;
-	uchar buf[64];
-	if (gd->env_valid == 0){
-		AT91F_DataflashInit();	/* prepare for DATAFLASH read/write */
-
-		/* read old CRC */
-		read_dataflash(CONFIG_ENV_ADDR + offsetof(env_t, crc),
-			sizeof(ulong), (char *)&crc);
-		new = 0;
-		len = ENV_SIZE;
-		off = offsetof(env_t,data);
-		while (len > 0) {
-			int n = (len > sizeof(buf)) ? sizeof(buf) : len;
-			read_dataflash(CONFIG_ENV_ADDR + off, n, (char *)buf);
-			new = crc32 (new, buf, n);
-			len -= n;
-			off += n;
-		}
-		if (crc == new) {
-			gd->env_addr  = offsetof(env_t,data);
-			gd->env_valid = 1;
-		} else {
+    
+             UartPuts("evn_init_run");
 			gd->env_addr  = (ulong)&default_environment[0];
 			gd->env_valid = 0;
-		}
-	}
-
-	return (0);
+	        return (0);
 }

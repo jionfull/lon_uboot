@@ -61,9 +61,17 @@
 #include "../drivers/net/lan91c96.h"
 #endif
 
+#include "tl16c752_reg.h"
+
 DECLARE_GLOBAL_DATA_PTR;
 
 ulong monitor_flash_len;
+
+#define BASEADDR  (0x30000000)
+
+
+extern void UartPuts(const char *pStr);
+
 
 #ifdef CONFIG_HAS_DATAFLASH
 extern int  AT91F_DataflashInit(void);
@@ -86,7 +94,6 @@ extern void rtl8019_get_enetaddr (uchar * addr);
 #include <i2c.h>
 #endif
 
-extern void UartPuts(const char *pStr);
 
 /************************************************************************
  * Coloured LED functionality

@@ -63,7 +63,7 @@ void serial_setbrg(void)
 
 int serial_init(void)
 {
-    UartPuts("serial_init_is run");
+    UartPuts("serial_init_is run\r\n");
 	usart3_writel(CR, USART3_BIT(RSTRX) | USART3_BIT(RSTTX));
 
 	serial_setbrg();
@@ -89,6 +89,8 @@ void serial_putc(char c)
 
 void serial_puts(const char *s)
 {
+    UartPuts("serial_init_is run\r\n");
+    UartPuts(s);
 	while (*s)
 		serial_putc(*s++);
 }
