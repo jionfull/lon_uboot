@@ -71,7 +71,7 @@
 /* LED */
 #define CONFIG_AT91_LED
 #define	CONFIG_RED_LED		AT91_PIO_PORTB, 30	/* the power led */
-#define	CONFIG_GREEN_LED	AT91_PIO_PORTA, 25	/* the user1 led */
+#define	CONFIG_GREEN_LED	AT91_PIO_PORTA, 24	/* the user1 led */
 #define	CONFIG_YELLOW_LED	AT91_PIO_PORTA, 25	/* the user2 led */
 
 #define CONFIG_BOOTDELAY	3

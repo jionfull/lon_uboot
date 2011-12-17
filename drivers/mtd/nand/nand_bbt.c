@@ -1210,6 +1210,7 @@ int nand_default_bbt(struct mtd_info *mtd)
 */
 int nand_isbad_bbt(struct mtd_info *mtd, loff_t offs, int allowbbt)
 {
+    puts("is bad bbt is run");
 	struct nand_chip *this = mtd->priv;
 	int block;
 	uint8_t res;

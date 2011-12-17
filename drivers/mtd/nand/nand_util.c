@@ -67,6 +67,7 @@ static int nand_block_bad_scrub(struct mtd_info *mtd, loff_t ofs, int getchip)
  */
 int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 {
+    puts("erase_opts is run");
 	struct jffs2_unknown_node cleanmarker;
 	erase_info_t erase;
 	ulong erase_length;
@@ -90,12 +91,15 @@ int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 	cleanmarker.nodetype = cpu_to_je16 (JFFS2_NODETYPE_CLEANMARKER);
 	cleanmarker.totlen = cpu_to_je32(8);
 
+    puts("cpu_to_je32 is run ok\r\n");
+
 	/* scrub option allows to erase badblock. To prevent internal
 	 * check from erase() method, set block check method to dummy
 	 * and disable bad block table while erasing.
 	 */
 	if (opts->scrub) {
 		struct nand_chip *priv_nand = meminfo->priv;
+        puts("is scrub\r\n");
 
 		nand_block_bad_old = priv_nand->block_bad;
 		priv_nand->block_bad = nand_block_bad_scrub;
@@ -108,6 +112,7 @@ int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 		priv_nand->bbt = NULL;
 	}
 
+        puts("is scrub is out\r\n");
 	if (erase_length < meminfo->erasesize) {
 		printf("Warning: Erase size 0x%08lx smaller than one "	\
 		       "erase block 0x%08x\n",erase_length, meminfo->erasesize);
@@ -119,10 +124,16 @@ int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 	     erase.addr < opts->offset + erase_length;
 	     erase.addr += meminfo->erasesize) {
 
+        puts("go to WATCHDOG_RESET\r\n");
 		WATCHDOG_RESET ();
+        puts(" WATCHDOG_RESET is out\r\n");
+          
+
 
 		if (!opts->scrub && bbtest) {
+        puts(" block_isbad is run\r\n");
 			int ret = meminfo->block_isbad(meminfo, erase.addr);
+        puts(" block_isbad is out\r\n");
 			if (ret > 0) {
 				if (!opts->quiet)
 					printf("\rSkipping bad block at  "
@@ -139,6 +150,8 @@ int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 			}
 		}
 
+
+        puts(" erase  is run\r\n");
 		result = meminfo->erase(meminfo, &erase);
 		if (result != 0) {
 			printf("\n%s: MTD Erase failure: %d\n",
