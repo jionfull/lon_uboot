@@ -1006,11 +1006,14 @@ int nand_scan_bbt(struct mtd_info *mtd, struct nand_bbt_descr *bd)
 		return -ENOMEM;
 	}
 
+    printf("is the bba at a give given is run\r\n");
 	/* Is the bbt at a given page ? */
 	if (td->options & NAND_BBT_ABSPAGE) {
+    printf("read_abs is run\r\n");
 		res = read_abs_bbts(mtd, buf, td, md);
 	} else {
 		/* Search the bad block table using a pattern in oob */
+    printf("search_read_bbat is run\r\n");
 		res = search_read_bbts(mtd, buf, td, md);
 	}
 
@@ -1163,6 +1166,8 @@ int nand_default_bbt(struct mtd_info *mtd)
 {
 	struct nand_chip *this = mtd->priv;
 
+    printf("%s %s is run\r\n"__FILE__,__func__);
+
 	/* Default for AG-AND. We must use a flash based
 	 * bad block table as the devices have factory marked
 	 * _good_ blocks. Erasing those blocks leads to loss
@@ -1177,6 +1182,8 @@ int nand_default_bbt(struct mtd_info *mtd)
 			this->bbt_md = &bbt_mirror_descr;
 		}
 		this->options |= NAND_USE_FLASH_BBT;
+
+       printf("nand_scan _bbt is run\r\n");
 		return nand_scan_bbt(mtd, &agand_flashbased);
 	}
 
@@ -1198,6 +1205,7 @@ int nand_default_bbt(struct mtd_info *mtd)
 			    &largepage_memorybased : &smallpage_memorybased;
 		}
 	}
+    printf("%s %s is call  nand_scan_bbt\r\n"__FILE__,__func__);
 	return nand_scan_bbt(mtd, this->badblock_pattern);
 }
 

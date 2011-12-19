@@ -237,6 +237,20 @@ int do_nand(cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 		return 0;
 	}
 
+	if (strcmp(cmd, "data") == 0)
+    {
+       char *a=(volatile char *)0; 
+           int i;
+       for(i=0;i<0x100;i+=16)
+       {
+            printf("%x  %x  %x  %x",a[i],a[i+1],a[i+2],a[i+3]);
+            printf("%x  %x  %x  %x",a[i+4],a[i+1+4],a[i+2+4],a[i+3+4]);
+            printf("%x  %x  %x  %x",a[i+8],a[i+1+8],a[i+2+8],a[i+3+8]);
+            printf("%x  %x  %x  %x",a[i+12],a[i+1+12],a[i+2+12],a[i+3+12]);
+            printf("\r\n");
+       }
+
+    }
 	if (strcmp(cmd, "device") == 0) {
 
 		if (argc < 3) {
@@ -288,7 +302,12 @@ int do_nand(cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 		for (off = 0; off < nand->size; off += nand->erasesize)
 			if (nand_block_isbad(nand, off))
 				printf("  %08lx\n", off);
+            else{
+				printf("  %08lx Is Ok\n", off);
+
+                     }
 		return 0;
+
 	}
 
 	/*

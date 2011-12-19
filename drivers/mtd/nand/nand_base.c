@@ -473,10 +473,14 @@ static int nand_block_checkbad(struct mtd_info *mtd, loff_t ofs, int getchip,
 			       int allowbbt)
 {
 	struct nand_chip *chip = mtd->priv;
+    printf(__FILE__);
+    printf("nand_block_checkbad is run\r\n");
 
 	if (!(chip->options & NAND_BBT_SCANNED)) {
 		chip->options |= NAND_BBT_SCANNED;
+    printf("scan bbt is sun");
 		chip->scan_bbt(mtd);
+    printf("scan bbt is out");
 	}
 
 	if (!chip->bbt)
@@ -857,6 +861,8 @@ static int nand_wait(struct mtd_info *mtd, struct nand_chip *this)
 		timeo = (CONFIG_SYS_HZ * 400) / 1000;
 	else
 		timeo = (CONFIG_SYS_HZ * 20) / 1000;
+    
+
 
 	if ((state == FL_ERASING) && (this->options & NAND_IS_AND))
 		this->cmdfunc(mtd, NAND_CMD_STATUS_MULTI, -1, -1);
@@ -865,11 +871,20 @@ static int nand_wait(struct mtd_info *mtd, struct nand_chip *this)
 
 	reset_timer();
 
+    printf(__FILE__);
+    printf("wait Start\r\n");
+    int i;
+    i=get_timer(0);
 	while (1) {
 		if (get_timer(0) > timeo) {
-			printf("Timeout!");
+			printf("Timeout!\r\n");
 			return 0x01;
 		}
+        if(i!=get_timer(0))
+        {
+            i=get_timer(0);
+            printf("waiting %d\r\n",i);
+        }
 
 		if (this->dev_ready) {
 			if (this->dev_ready(mtd))
