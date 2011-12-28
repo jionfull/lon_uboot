@@ -877,13 +877,12 @@ static int nand_wait(struct mtd_info *mtd, struct nand_chip *this)
     i=get_timer(0);
 	while (1) {
 		if (get_timer(0) > timeo) {
-			printf("Timeout!\r\n");
-			return 0x01;
+            printf("timeout\r\n");
+            break;
 		}
         if(i!=get_timer(0))
         {
             i=get_timer(0);
-            printf("waiting %d\r\n",i);
         }
 
 		if (this->dev_ready) {
@@ -1927,7 +1926,10 @@ static int nand_write_page(struct mtd_info *mtd, struct nand_chip *chip,
 					       page);
 
 		if (status & NAND_STATUS_FAIL)
+        {
+        printf("waitfunc is fail\r\n");
 			return -EIO;
+        }
 	} else {
 		chip->cmdfunc(mtd, NAND_CMD_CACHEDPROG, -1, -1);
 		status = chip->waitfunc(mtd, chip);
@@ -1938,7 +1940,10 @@ static int nand_write_page(struct mtd_info *mtd, struct nand_chip *chip,
 	chip->cmdfunc(mtd, NAND_CMD_READ0, 0, page);
 
 	if (chip->verify_buf(mtd, buf, mtd->writesize))
+    {
+        printf("verify_buf is run\r\n");
 		return -EIO;
+    }
 #endif
 	return 0;
 }
@@ -2018,7 +2023,7 @@ static int nand_do_write_ops(struct mtd_info *mtd, loff_t to,
 
 	/* reject writes, which are not page aligned */
 	if (NOTALIGNED(to) || NOTALIGNED(ops->len)) {
-		printk(KERN_NOTICE "nand_write: "
+		printf("nand_write: "
 		       "Attempt to write not page aligned data\n");
 		return -EINVAL;
 	}
@@ -2027,14 +2032,17 @@ static int nand_do_write_ops(struct mtd_info *mtd, loff_t to,
 	subpage = column || (writelen & (mtd->writesize - 1));
 
 	if (subpage && oob)
+    {
+        printf("subpage or oob");
 		return -EINVAL;
+    }
 
 	chipnr = (int)(to >> chip->chip_shift);
 	chip->select_chip(mtd, chipnr);
 
 	/* Check, if it is write protected */
 	if (nand_check_wp(mtd)) {
-		printk (KERN_NOTICE "nand_do_write_ops: Device is write protected\n");
+		printf ("nand_do_write_ops: Device is write protected\n");
 		return -EIO;
 	}
 
@@ -2112,10 +2120,15 @@ static int nand_write(struct mtd_info *mtd, loff_t to, size_t len,
 {
 	struct nand_chip *chip = mtd->priv;
 	int ret;
+    printf("%s nand_write() is run\r\n",__FILE__);
+
 
 	/* Do not allow reads past end of device */
 	if ((to + len) > mtd->size)
+    {
+        printf("to len  %llx+ %llx > mtd->size");
 		return -EINVAL;
+    }
 	if (!len)
 		return 0;
 
@@ -2321,27 +2334,28 @@ int nand_erase_nand(struct mtd_info *mtd, struct erase_info *instr,
 	unsigned int bbt_masked_page = 0xffffffff;
 	loff_t len;
 
-	MTDDEBUG(MTD_DEBUG_LEVEL3, "nand_erase: start = 0x%012llx, "
+	printf("nand_erase: start = 0x%012llx, "
+		 "nand size=0x%012llx", (unsigned long long) instr->addr,
+		 (unsigned long long)mtd->size);
+
+	printf("nand_chip->phys_erase_shift = 0x%012llx, "
 		 "len = %llu\n", (unsigned long long) instr->addr,
 		 (unsigned long long) instr->len);
-
 	/* Start address must align on block boundary */
 	if (instr->addr & ((1 << chip->phys_erase_shift) - 1)) {
-		MTDDEBUG (MTD_DEBUG_LEVEL0, "nand_erase: Unaligned address\n");
+		printf("nand_erase: Unaligned address\n");
 		return -EINVAL;
 	}
 
 	/* Length must align on block boundary */
 	if (instr->len & ((1 << chip->phys_erase_shift) - 1)) {
-		MTDDEBUG (MTD_DEBUG_LEVEL0,
-		          "nand_erase: Length not block aligned\n");
+		printf( "nand_erase: Length not block aligned\n");
 		return -EINVAL;
 	}
 
 	/* Do not allow erase past end of device */
 	if ((instr->len + instr->addr) > mtd->size) {
-		MTDDEBUG (MTD_DEBUG_LEVEL0,
-		          "nand_erase: Erase past end of device\n");
+		printf( "nand_erase: Erase past end of device\n");
 		return -EINVAL;
 	}
 
@@ -2362,8 +2376,7 @@ int nand_erase_nand(struct mtd_info *mtd, struct erase_info *instr,
 
 	/* Check, if it is write protected */
 	if (nand_check_wp(mtd)) {
-		MTDDEBUG (MTD_DEBUG_LEVEL0,
-		          "nand_erase: Device is write protected!!!\n");
+		          printf("nand_erase: Device is write protected!!!\n");
 		instr->state = MTD_ERASE_FAILED;
 		goto erase_exit;
 	}
@@ -2388,7 +2401,7 @@ int nand_erase_nand(struct mtd_info *mtd, struct erase_info *instr,
 		 */
 		if (nand_block_checkbad(mtd, ((loff_t) page) <<
 					chip->page_shift, 0, allowbbt)) {
-			printk(KERN_WARNING "nand_erase: attempt to erase a "
+			printf("nand_erase: attempt to erase a "
 			       "bad block at page 0x%08x\n", page);
 			instr->state = MTD_ERASE_FAILED;
 			goto erase_exit;

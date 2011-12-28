@@ -252,6 +252,7 @@ static int scan_read_raw(struct mtd_info *mtd, uint8_t *buf, loff_t offs,
 {
 	struct mtd_oob_ops ops;
 
+    printf("scan_read_raw() is run\r\n");
 	ops.mode = MTD_OOB_RAW;
 	ops.ooboffs = 0;
 	ops.ooblen = mtd->oobsize;
@@ -325,7 +326,10 @@ static int scan_block_full(struct mtd_info *mtd, struct nand_bbt_descr *bd,
 {
 	int ret, j;
 
+    printf("scan_block_full is run\r\n");
 	ret = scan_read_raw(mtd, buf, offs, readlen);
+    printf("scan_read_raw return %d",ret);
+
 	if (ret)
 		return ret;
 
@@ -389,6 +393,7 @@ static int create_bbt(struct mtd_info *mtd, uint8_t *buf,
 	loff_t from;
 	size_t readlen;
 
+    printf("create_bbt is run\r\n");
 	MTDDEBUG (MTD_DEBUG_LEVEL0, "Scanning device for bad blocks\n");
 
 	if (bd->options & NAND_BBT_SCANALLPAGES)
@@ -432,8 +437,11 @@ static int create_bbt(struct mtd_info *mtd, uint8_t *buf,
 		int ret;
 
 		if (bd->options & NAND_BBT_SCANALLPAGES)
+        {
+            printf("go to scan_block_full\r\n");
 			ret = scan_block_full(mtd, bd, from, buf, readlen,
 					      scanlen, len);
+        }
 		else
 			ret = scan_block_fast(mtd, bd, from, buf, len);
 
@@ -772,6 +780,7 @@ static inline int nand_memory_bbt(struct mtd_info *mtd, struct nand_bbt_descr *b
 	struct nand_chip *this = mtd->priv;
 
 	bd->options &= ~NAND_BBT_SCANEMPTY;
+    printf("nand_memory_bbt() is run\r\n");
 	return create_bbt(mtd, this->buffers->databuf, bd, -1);
 }
 
@@ -974,33 +983,37 @@ int nand_scan_bbt(struct mtd_info *mtd, struct nand_bbt_descr *bd)
 	uint8_t *buf;
 	struct nand_bbt_descr *td = this->bbt_td;
 	struct nand_bbt_descr *md = this->bbt_md;
+    printf("nand_scan_bbt is run\r\n");
 
 	len = mtd->size >> (this->bbt_erase_shift + 2);
 	/* Allocate memory (2bit per block) and clear the memory bad block table */
 	this->bbt = kzalloc(len, GFP_KERNEL);
 	if (!this->bbt) {
-		printk(KERN_ERR "nand_scan_bbt: Out of memory\n");
+        printf("nand_scan_bbt is Out of memory\r\n");
 		return -ENOMEM;
 	}
 
+    printf("%d is run\r\n",__LINE__);
 	/* If no primary table decriptor is given, scan the device
 	 * to build a memory based bad block table
 	 */
 	if (!td) {
 		if ((res = nand_memory_bbt(mtd, bd))) {
-			printk(KERN_ERR "nand_bbt: Can't scan flash and build the RAM-based BBT\n");
+            printf("nand_scan_bbt is Can't scan flash and build\r\n");
 			kfree(this->bbt);
 			this->bbt = NULL;
 		}
+        printf("!td\r\n");
 		return res;
 	}
 
+    printf("%d is run\r\n",__LINE__);
 	/* Allocate a temporary buffer for one eraseblock incl. oob */
 	len = (1 << this->bbt_erase_shift);
 	len += (len >> this->page_shift) * mtd->oobsize;
 	buf = vmalloc(len);
 	if (!buf) {
-		printk(KERN_ERR "nand_bbt: Out of memory\n");
+		printf("nand_bbt: Out of memory\n");
 		kfree(this->bbt);
 		this->bbt = NULL;
 		return -ENOMEM;
@@ -1166,7 +1179,8 @@ int nand_default_bbt(struct mtd_info *mtd)
 {
 	struct nand_chip *this = mtd->priv;
 
-    printf("%s %s is run\r\n"__FILE__,__func__);
+    //printf("%s %s is run\r\n"__FILE__,__LINE__);
+    printf("nand_default_bbt is run\r\n");
 
 	/* Default for AG-AND. We must use a flash based
 	 * bad block table as the devices have factory marked
@@ -1205,7 +1219,8 @@ int nand_default_bbt(struct mtd_info *mtd)
 			    &largepage_memorybased : &smallpage_memorybased;
 		}
 	}
-    printf("%s %s is call  nand_scan_bbt\r\n"__FILE__,__func__);
+  // printf("%s %s is call  nand_scan_bbt\r\n"__FILE__,__LINE__);
+   printf(" is call  nand_scan_bbt\r\n");
 	return nand_scan_bbt(mtd, this->badblock_pattern);
 }
 
