@@ -2126,7 +2126,7 @@ static int nand_write(struct mtd_info *mtd, loff_t to, size_t len,
 	/* Do not allow reads past end of device */
 	if ((to + len) > mtd->size)
     {
-        printf("to len  %llx+ %llx > mtd->size");
+        printf("to len  %llx+ %llx > mtd->size",to,len);
 		return -EINVAL;
     }
 	if (!len)
@@ -2339,7 +2339,7 @@ int nand_erase_nand(struct mtd_info *mtd, struct erase_info *instr,
 		 (unsigned long long)mtd->size);
 
 	printf("nand_chip->phys_erase_shift = 0x%012llx, "
-		 "len = %llu\n", (unsigned long long) instr->addr,
+		 "len = %llu\n", (unsigned long long) chip->phys_erase_shift,
 		 (unsigned long long) instr->len);
 	/* Start address must align on block boundary */
 	if (instr->addr & ((1 << chip->phys_erase_shift) - 1)) {
@@ -2728,7 +2728,7 @@ static struct nand_flash_dev *nand_get_flash_type(struct mtd_info *mtd,
 	 * chip correct !
 	 */
 	if (busw != (chip->options & NAND_BUSWIDTH_16)) {
-		printk(KERN_INFO "NAND device: Manufacturer ID:"
+		printf(KERN_INFO "NAND device: Manufacturer ID:"
 		       " 0x%02x, Chip ID: 0x%02x (%s %s)\n", *maf_id,
 		       dev_id, nand_manuf_ids[maf_idx].name, mtd->name);
 		printk(KERN_WARNING "NAND bus width %d instead %d bit\n",

@@ -195,8 +195,8 @@ static int atmel_nand_correct(struct mtd_info *mtd, u_char *dat,
 		/* it doesn't seems to be a freshly
 		 * erased block.
 		 * We can't correct so many errors */
-		printk(KERN_WARNING "atmel_nand : multiple errors detected."
-				" Unable to correct.\n");
+		printf("atmel_nand : multiple errors detected."
+				" Unable to correct.\r\n");
 		return -EIO;
 	}
 
@@ -205,14 +205,14 @@ static int atmel_nand_correct(struct mtd_info *mtd, u_char *dat,
 		/* there's nothing much to do here.
 		 * the bit error is on the ECC itself.
 		 */
-		printk(KERN_WARNING "atmel_nand : one bit error on ECC code."
-				" Nothing to correct\n");
+		printf("atmel_nand : one bit error on ECC code."
+				" Nothing to correct\r\n");
 		return 0;
 	}
 
-	printk(KERN_WARNING "atmel_nand : one bit error on data."
+	printf("atmel_nand : one bit error on data."
 			" (word offset in the page :"
-			" 0x%x bit offset : 0x%x)\n",
+			" 0x%x bit offset : 0x%x)\r\n",
 			ecc_word, ecc_bit);
 	/* correct the error */
 	if (nand_chip->options & NAND_BUSWIDTH_16) {
@@ -222,7 +222,7 @@ static int atmel_nand_correct(struct mtd_info *mtd, u_char *dat,
 		/* 8 bits words */
 		dat[ecc_word] ^= (1 << ecc_bit);
 	}
-	printk(KERN_WARNING "atmel_nand : error corrected\n");
+	printf("atmel_nand : error corrected\r\n");
 	return 1;
 }
 
@@ -273,9 +273,7 @@ int board_nand_init(struct nand_chip *nand)
 #endif
 
 	nand->ecc.mode = NAND_ECC_SOFT;
-#ifdef CONFIG_SYS_NAND_DBW_16
-	nand->options = NAND_BUSWIDTH_16;
-#endif
+	nand->options |= NAND_USE_FLASH_BBT;
 	nand->cmd_ctrl = at91_nand_hwcontrol;
 #ifdef CONFIG_SYS_NAND_READY_PIN
 	nand->dev_ready = at91_nand_ready;
@@ -297,7 +295,7 @@ int board_nand_init(struct nand_chip *nand)
 
 	/* Detect NAND chips */
 	if (nand_scan_ident(mtd, 1)) {
-		printk(KERN_WARNING "NAND Flash not found !\n");
+		printf("NAND Flash not found !\r\n");
 		return -ENXIO;
 	}
 

@@ -215,6 +215,9 @@ int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 	return 0;
 }
 
+int nand_upbbt_opts(nand_info_t *meminfo)
+{
+}
 /* XXX U-BOOT XXX */
 #if 0
 
