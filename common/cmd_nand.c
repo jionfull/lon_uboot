@@ -303,7 +303,6 @@ int do_nand(cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 			if (nand_block_isbad(nand, off))
 				printf("  %08lx\n", off);
             else{
-				printf("  %08lx Is Ok\n", off);
 
                      }
 		return 0;

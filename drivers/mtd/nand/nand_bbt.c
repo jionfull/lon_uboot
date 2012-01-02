@@ -355,7 +355,10 @@ static int scan_block_fast(struct mtd_info *mtd, struct nand_bbt_descr *bd,
 	ops.datbuf = NULL;
 	ops.mode = MTD_OOB_PLACE;
 
+    if(offs%1000==0)
+    {
     printf(".");
+    }
 	for (j = 0; j < len; j++) {
 		/*
 		 * Read the full oob until read_oob is fixed to
@@ -451,7 +454,6 @@ static int create_bbt(struct mtd_info *mtd, uint8_t *buf,
         }
 		else
         {
-            printf(".");
 			ret = scan_block_fast(mtd, bd, from, buf, len);
         }
 
@@ -1248,7 +1250,6 @@ int nand_default_bbt(struct mtd_info *mtd)
 */
 int nand_isbad_bbt(struct mtd_info *mtd, loff_t offs, int allowbbt)
 {
-    puts("is bad bbt is run");
 	struct nand_chip *this = mtd->priv;
 	int block;
 	uint8_t res;

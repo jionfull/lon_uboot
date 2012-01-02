@@ -273,7 +273,7 @@ int board_nand_init(struct nand_chip *nand)
 #endif
 
 	nand->ecc.mode = NAND_ECC_SOFT;
-	nand->options |= NAND_USE_FLASH_BBT;
+//	nand->options |= NAND_USE_FLASH_BBT;
 	nand->cmd_ctrl = at91_nand_hwcontrol;
 #ifdef CONFIG_SYS_NAND_READY_PIN
 	nand->dev_ready = at91_nand_ready;

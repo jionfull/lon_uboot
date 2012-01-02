@@ -112,7 +112,7 @@ static void at91sam9263ek_nand_hw_init(void)
 		       AT91_SMC_MODE_TDF_CYCLE(2),
 		&smc->cs[3].mode);
 
-	writel(1 << AT91SAM9263_ID_PIOA | 1 << AT91SAM9263_ID_PIOCDE,
+	writel(1 << AT91SAM9263_ID_PIOB | 1 << AT91SAM9263_ID_PIOCDE,
 		&pmc->pcer);
 
 	/* Configure RDY/BSY */
