@@ -967,55 +967,57 @@ static int check_create(struct mtd_info *mtd, uint8_t *buf, struct nand_bbt_desc
 */
 static void mark_bbt_region(struct mtd_info *mtd, struct nand_bbt_descr *td)
 {
-	struct nand_chip *this = mtd->priv;
-	int i, j, chips, block, nrblocks, update;
-	uint8_t oldval, newval;
-
-	/* Do we have a bbt per chip ? */
-	if (td->options & NAND_BBT_PERCHIP) {
-		chips = this->numchips;
-		nrblocks = (int)(this->chipsize >> this->bbt_erase_shift);
-	} else {
-		chips = 1;
-		nrblocks = (int)(mtd->size >> this->bbt_erase_shift);
-	}
-
-	for (i = 0; i < chips; i++) {
-		if ((td->options & NAND_BBT_ABSPAGE) ||
-		    !(td->options & NAND_BBT_WRITE)) {
-			if (td->pages[i] == -1)
-				continue;
-			block = td->pages[i] >> (this->bbt_erase_shift - this->page_shift);
-			block <<= 1;
-			oldval = this->bbt[(block >> 3)];
-			newval = oldval | (0x2 << (block & 0x06));
-			this->bbt[(block >> 3)] = newval;
-			if ((oldval != newval) && td->reserved_block_code)
-				nand_update_bbt(mtd, (loff_t)block <<
-					(this->bbt_erase_shift - 1));
-			continue;
-		}
-		update = 0;
-		if (td->options & NAND_BBT_LASTBLOCK)
-			block = ((i + 1) * nrblocks) - td->maxblocks;
-		else
-			block = i * nrblocks;
-		block <<= 1;
-		for (j = 0; j < td->maxblocks; j++) {
-			oldval = this->bbt[(block >> 3)];
-			newval = oldval | (0x2 << (block & 0x06));
-			this->bbt[(block >> 3)] = newval;
-			if (oldval != newval)
-				update = 1;
-			block += 2;
-		}
-		/* If we want reserved blocks to be recorded to flash, and some
-		   new ones have been marked, then we need to update the stored
-		   bbts.  This should only happen once. */
-		if (update && td->reserved_block_code)
-			nand_update_bbt(mtd, (loff_t)(block - 2) <<
-				(this->bbt_erase_shift - 1));
-	}
+//{
+//	struct nand_chip *this = mtd->priv;
+//	int i, j, chips, block, nrblocks, update;
+//	uint8_t oldval, newval;
+//
+//	/* Do we have a bbt per chip ? */
+//	if (td->options & NAND_BBT_PERCHIP) {
+//		chips = this->numchips;
+//		nrblocks = (int)(this->chipsize >> this->bbt_erase_shift);
+//	} else {
+//		chips = 1;
+//		nrblocks = (int)(mtd->size >> this->bbt_erase_shift);
+//	}
+//
+//	for (i = 0; i < chips; i++) {
+//		if ((td->options & NAND_BBT_ABSPAGE) ||
+//		    !(td->options & NAND_BBT_WRITE)) {
+//			if (td->pages[i] == -1)
+//				continue;
+//			block = td->pages[i] >> (this->bbt_erase_shift - this->page_shift);
+//			block <<= 1;
+//			oldval = this->bbt[(block >> 3)];
+//			newval = oldval | (0x2 << (block & 0x06));
+//			this->bbt[(block >> 3)] = newval;
+//			if ((oldval != newval) && td->reserved_block_code)
+//				nand_update_bbt(mtd, (loff_t)block <<
+//					(this->bbt_erase_shift - 1));
+//			continue;
+//		}
+//		update = 0;
+//		if (td->options & NAND_BBT_LASTBLOCK)
+//			block = ((i + 1) * nrblocks) - td->maxblocks;
+//		else
+//			block = i * nrblocks;
+//		block <<= 1;
+//		for (j = 0; j < td->maxblocks; j++) {
+//			oldval = this->bbt[(block >> 3)];
+//			newval = oldval | (0x2 << (block & 0x06));
+//			this->bbt[(block >> 3)] = newval;
+//			if (oldval != newval)
+//				update = 1;
+//			block += 2;
+//		}
+//		/* If we want reserved blocks to be recorded to flash, and some
+//		   new ones have been marked, then we need to update the stored
+//		   bbts.  This should only happen once. */
+//		if (update && td->reserved_block_code)
+//			nand_update_bbt(mtd, (loff_t)(block - 2) <<
+//				(this->bbt_erase_shift - 1));
+//	}
+//}
 }
 
 /**
@@ -1036,7 +1038,6 @@ int nand_scan_bbt(struct mtd_info *mtd, struct nand_bbt_descr *bd)
 {
 	struct nand_chip *this = mtd->priv;
 	int len, res = 0;
-	uint8_t *buf;
 	struct nand_bbt_descr *td = this->bbt_td;
 	struct nand_bbt_descr *md = this->bbt_md;
 #ifdef NAND_DEBUG
@@ -1054,58 +1055,11 @@ int nand_scan_bbt(struct mtd_info *mtd, struct nand_bbt_descr *bd)
 	/* If no primary table decriptor is given, scan the device
 	 * to build a memory based bad block table
 	 */
-	if (!td) {
-		if ((res = nand_memory_bbt(mtd, bd))) {
-            printf("nand_scan_bbt is Can't scan flash and build\r\n");
-			kfree(this->bbt);
-			this->bbt = NULL;
-		}
-        printf("!td\r\n");
-		return res;
-	}
-
-#ifdef NAND_DEBUG
-    printf("%d is run\r\n",__LINE__);
-#endif //NAND_DEBUG
-	/* Allocate a temporary buffer for one eraseblock incl. oob */
-	len = (1 << this->bbt_erase_shift);
-	len += (len >> this->page_shift) * mtd->oobsize;
-	buf = vmalloc(len);
-	if (!buf) {
-#ifdef NAND_DEBUG
-		printf("nand_bbt: Out of memory\n");
-#endif //NAND_DEBUG
+	if ((res = nand_memory_bbt(mtd, bd))) {
+        printf("nand_scan_bbt is Can't scan flash and build\r\n");
 		kfree(this->bbt);
 		this->bbt = NULL;
-		return -ENOMEM;
 	}
-
-#ifdef NAND_DEBUG
-    printf("is the bba at a give given is run\r\n");
-#endif
-	/* Is the bbt at a given page ? */
-	if (td->options & NAND_BBT_ABSPAGE) {
-#ifdef NAND_DEBUG
-    printf("read_abs is run\r\n");
-#endif //NAND_DEBUG
-		res = read_abs_bbts(mtd, buf, td, md);
-	} else {
-		/* Search the bad block table using a pattern in oob */
-#ifdef NAND_DEBUG
-    printf("search_read_bbt is run\r\n");
-#endif
-		res = search_read_bbts(mtd, buf, td, md);
-	}
-
-	if (res)
-		res = check_create(mtd, buf, bd);
-
-	/* Prevent the bbt regions from erasing / writing */
-	mark_bbt_region(mtd, td);
-	if (md)
-		mark_bbt_region(mtd, md);
-
-	vfree(buf);
 	return res;
 }
 

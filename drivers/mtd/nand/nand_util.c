@@ -99,7 +99,10 @@ int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 	 */
 	if (opts->scrub) {
 		struct nand_chip *priv_nand = meminfo->priv;
+#ifdef NAND_DEBUG 
         puts("is scrub\r\n");
+#endif //NAND_DEBUG
+
 
 		nand_block_bad_old = priv_nand->block_bad;
 		priv_nand->block_bad = nand_block_bad_scrub;
@@ -124,9 +127,14 @@ int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 	     erase.addr < opts->offset + erase_length;
 	     erase.addr += meminfo->erasesize) {
 
+        
+#ifdef NAND_DEBUG
         puts("go to WATCHDOG_RESET\r\n");
+#endif //NAND_DEBUG
 		WATCHDOG_RESET ();
+#ifdef NAND_DEBUG
         puts(" WATCHDOG_RESET is out\r\n");
+#endif //NAND_DEBUG
           
 
 
