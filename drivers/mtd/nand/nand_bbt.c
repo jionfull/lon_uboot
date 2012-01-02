@@ -252,7 +252,9 @@ static int scan_read_raw(struct mtd_info *mtd, uint8_t *buf, loff_t offs,
 {
 	struct mtd_oob_ops ops;
 
+#ifdef NAND_DEBUG
     printf("scan_read_raw() is run\r\n");
+#endif //NAND_DEBUG
 	ops.mode = MTD_OOB_RAW;
 	ops.ooboffs = 0;
 	ops.ooblen = mtd->oobsize;
@@ -326,9 +328,13 @@ static int scan_block_full(struct mtd_info *mtd, struct nand_bbt_descr *bd,
 {
 	int ret, j;
 
+#ifdef NAND_DEBUG
     printf("scan_block_full is run\r\n");
+#endif //NAND_DEBUG
 	ret = scan_read_raw(mtd, buf, offs, readlen);
+#ifdef NAND_DEBUG
     printf("scan_read_raw return %d",ret);
+#endif //NAND_DEBUG
 
 	if (ret)
 		return ret;
@@ -355,10 +361,12 @@ static int scan_block_fast(struct mtd_info *mtd, struct nand_bbt_descr *bd,
 	ops.datbuf = NULL;
 	ops.mode = MTD_OOB_PLACE;
 
+#ifdef NAND_DEBUG
     if(offs%1000==0)
     {
     printf(".");
     }
+#endif //NAND_DEBUG
 	for (j = 0; j < len; j++) {
 		/*
 		 * Read the full oob until read_oob is fixed to
@@ -403,7 +411,9 @@ static int create_bbt(struct mtd_info *mtd, uint8_t *buf,
 	loff_t from;
 	size_t readlen;
 
+#ifdef NAND_DEBUG
 	printf("Scanning device for bad blocks\n");
+#endif //NAND_DEBUG
 
 	if (bd->options & NAND_BBT_SCANALLPAGES)
 		len = 1 << (this->bbt_erase_shift - this->page_shift);
@@ -448,7 +458,9 @@ static int create_bbt(struct mtd_info *mtd, uint8_t *buf,
 
 		if (bd->options & NAND_BBT_SCANALLPAGES)
         {
+#ifdef NAND_DEBUG
             printf("go to scan_block_full\r\n");
+#endif //NAND_DEBUG
 			ret = scan_block_full(mtd, bd, from, buf, readlen,
 					      scanlen, len);
         }
@@ -502,15 +514,20 @@ static int search_bbt(struct mtd_info *mtd, uint8_t *buf, struct nand_bbt_descr 
 	int scanlen = mtd->writesize + mtd->oobsize;
 	int bbtblocks;
 	int blocktopage = this->bbt_erase_shift - this->page_shift;
-
+#ifdef NAND_DEBUG
     printf("search_bbt is run\r\n");
+#endif //NAND_DEBUG
 	/* Search direction top -> down ? */
 	if (td->options & NAND_BBT_LASTBLOCK) {
+#ifdef NAND_DEBUG 
         printf("NAND_BBT_LASTBLOCK\r\n");
+#endif //NAND_DEBUG 
 		startblock = (mtd->size >> this->bbt_erase_shift) - 1;
 		dir = -1;
 	} else {
+#ifdef NAND_DEBUG 
         printf("NAND_BBT_ startblock = 0\r\n");
+#endif //NAND_DEBUG 
 		startblock = 0;
 		dir = 1;
 	}
@@ -518,12 +535,16 @@ static int search_bbt(struct mtd_info *mtd, uint8_t *buf, struct nand_bbt_descr 
 	/* Do we have a bbt per chip ? */
 	if (td->options & NAND_BBT_PERCHIP) {
         
+#ifdef NAND_DEBUG 
         printf("NAND_BBT_PERCHIP \r\n");
+#endif //NAND_DEBUG 
 		chips = this->numchips;
 		bbtblocks = this->chipsize >> this->bbt_erase_shift;
 		startblock &= bbtblocks - 1;
 	} else {
+#ifdef NAND_DEBUG 
         printf("CHIPs = 1 \r\n");
+#endif
 		chips = 1;
 		bbtblocks = mtd->size >> this->bbt_erase_shift;
 	}
@@ -801,7 +822,9 @@ static inline int nand_memory_bbt(struct mtd_info *mtd, struct nand_bbt_descr *b
 	struct nand_chip *this = mtd->priv;
 
 	bd->options &= ~NAND_BBT_SCANEMPTY;
+#ifdef NAND_DEBUG 
     printf("nand_memory_bbt() is run\r\n");
+#endif //NAND_DEBUG
 	return create_bbt(mtd, this->buffers->databuf, bd, -1);
 }
 
@@ -824,7 +847,9 @@ static int check_create(struct mtd_info *mtd, uint8_t *buf, struct nand_bbt_desc
 	struct nand_bbt_descr *td = this->bbt_td;
 	struct nand_bbt_descr *md = this->bbt_md;
 	struct nand_bbt_descr *rd, *rd2;
+#ifdef NAND_DEBUG 
     printf("check_create is runi\r\n");
+#endif //NAND_DEBUG 
 
 	/* Do we have a bbt per chip ? */
 	if (td->options & NAND_BBT_PERCHIP)
@@ -888,7 +913,9 @@ static int check_create(struct mtd_info *mtd, uint8_t *buf, struct nand_bbt_desc
 		}
 	create:
 		/* Create the bad block table by scanning the device ? */
+#ifdef NAND_DEBUG
         printf("check_create create: is run\r\n");
+#endif //NAND_DEBUG 
 		if (!(td->options & NAND_BBT_CREATE))
 			continue;
 
@@ -899,7 +926,9 @@ static int check_create(struct mtd_info *mtd, uint8_t *buf, struct nand_bbt_desc
 		if (md)
 			md->version[i] = 1;
 	writecheck:
+#ifdef NAND_DEBUG
         printf("check_create writecheck: is run\r\n");
+#endif //NAND_DEBUG 
 		/* read back first ? */
 		if (rd)
 			read_abs_bbt(mtd, buf, rd, chipsel);
@@ -909,7 +938,9 @@ static int check_create(struct mtd_info *mtd, uint8_t *buf, struct nand_bbt_desc
 
 		/* Write the bad block table to the device ? */
 		if ((writeops & 0x01) && (td->options & NAND_BBT_WRITE)) {
+#ifdef NAND_DEBUG
             printf("go to write_bbt\r\n");
+#endif //NAND_DEBUG 
 			res = write_bbt(mtd, buf, td, md, chipsel);
 			if (res < 0)
 				return res;
@@ -1008,7 +1039,9 @@ int nand_scan_bbt(struct mtd_info *mtd, struct nand_bbt_descr *bd)
 	uint8_t *buf;
 	struct nand_bbt_descr *td = this->bbt_td;
 	struct nand_bbt_descr *md = this->bbt_md;
+#ifdef NAND_DEBUG
     printf("nand_scan_bbt is run\r\n");
+#endif //NAND_DEBUG 
 
 	len = mtd->size >> (this->bbt_erase_shift + 2);
 	/* Allocate memory (2bit per block) and clear the memory bad block table */
@@ -1031,26 +1064,36 @@ int nand_scan_bbt(struct mtd_info *mtd, struct nand_bbt_descr *bd)
 		return res;
 	}
 
+#ifdef NAND_DEBUG
     printf("%d is run\r\n",__LINE__);
+#endif //NAND_DEBUG
 	/* Allocate a temporary buffer for one eraseblock incl. oob */
 	len = (1 << this->bbt_erase_shift);
 	len += (len >> this->page_shift) * mtd->oobsize;
 	buf = vmalloc(len);
 	if (!buf) {
+#ifdef NAND_DEBUG
 		printf("nand_bbt: Out of memory\n");
+#endif //NAND_DEBUG
 		kfree(this->bbt);
 		this->bbt = NULL;
 		return -ENOMEM;
 	}
 
+#ifdef NAND_DEBUG
     printf("is the bba at a give given is run\r\n");
+#endif
 	/* Is the bbt at a given page ? */
 	if (td->options & NAND_BBT_ABSPAGE) {
+#ifdef NAND_DEBUG
     printf("read_abs is run\r\n");
+#endif //NAND_DEBUG
 		res = read_abs_bbts(mtd, buf, td, md);
 	} else {
 		/* Search the bad block table using a pattern in oob */
+#ifdef NAND_DEBUG
     printf("search_read_bbt is run\r\n");
+#endif
 		res = search_read_bbts(mtd, buf, td, md);
 	}
 
@@ -1204,7 +1247,9 @@ int nand_default_bbt(struct mtd_info *mtd)
 	struct nand_chip *this = mtd->priv;
 
     //printf("%s %s is run\r\n"__FILE__,__LINE__);
+#ifdef NAND_DEBUG
     printf("nand_default_bbt is run\r\n");
+#endif //NAND_DEBUG 
 
 	/* Default for AG-AND. We must use a flash based
 	 * bad block table as the devices have factory marked
@@ -1213,8 +1258,10 @@ int nand_default_bbt(struct mtd_info *mtd)
 	 * this information in a good / bad table during
 	 * startup
 	 */
+#ifdef NAND_DEBUG
     printf("this->options is %x\r\n",this->options);
     printf("NAND_USE_FLASH_BBT is %x\r\n",NAND_USE_FLASH_BBT);
+#endif //NAND_DEBUG 
     
 //    this->options &= NAND_USE_FLASH_BBT;
 
@@ -1237,7 +1284,9 @@ int nand_default_bbt(struct mtd_info *mtd)
 			    &largepage_memorybased : &smallpage_memorybased;
 		}
 	}
+#ifdef NAND_DEBUG
     printf(" is call  nand_scan_bbt\r\n");
+#endif //NAND_DEBUG 
 	return nand_scan_bbt(mtd, this->badblock_pattern);
 }
 

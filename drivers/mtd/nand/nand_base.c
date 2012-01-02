@@ -473,14 +473,20 @@ static int nand_block_checkbad(struct mtd_info *mtd, loff_t ofs, int getchip,
 			       int allowbbt)
 {
 	struct nand_chip *chip = mtd->priv;
+#ifdef NAND_DEBUG
     printf(__FILE__);
     printf("nand_block_checkbad is run\r\n");
+#endif //NAND_DEBUG
 
 	if (!(chip->options & NAND_BBT_SCANNED)) {
 		chip->options |= NAND_BBT_SCANNED;
+#ifdef NAND_DEBUG
     printf("scan bbt is sun");
+#endif //NAND_DEBUG
 		chip->scan_bbt(mtd);
+#ifdef NAND_DEBUG
     printf("scan bbt is out");
+#endif //NAND_DEBUG
 	}
 
 	if (!chip->bbt)
@@ -871,8 +877,10 @@ static int nand_wait(struct mtd_info *mtd, struct nand_chip *this)
 
 	reset_timer();
 
+#ifdef NAND_DEBUG
     printf(__FILE__);
     printf("wait Start\r\n");
+#endif //NAND_DEBUG
     int i;
     i=get_timer(0);
 	while (1) {
@@ -1941,7 +1949,7 @@ static int nand_write_page(struct mtd_info *mtd, struct nand_chip *chip,
 
 	if (chip->verify_buf(mtd, buf, mtd->writesize))
     {
-        printf("verify_buf is run\r\n");
+        printf("verify_buf is err\r\n");
 		return -EIO;
     }
 #endif
@@ -2120,7 +2128,9 @@ static int nand_write(struct mtd_info *mtd, loff_t to, size_t len,
 {
 	struct nand_chip *chip = mtd->priv;
 	int ret;
+#ifdef NAND_DEBUG
     printf("%s nand_write() is run\r\n",__FILE__);
+#endif //NAND_DEBUG
 
 
 	/* Do not allow reads past end of device */
@@ -2334,27 +2344,46 @@ int nand_erase_nand(struct mtd_info *mtd, struct erase_info *instr,
 	unsigned int bbt_masked_page = 0xffffffff;
 	loff_t len;
 
+#ifdef NAND_DEBUG 
 	printf("nand_erase: start = 0x%012llx, "
 		 "nand size=0x%012llx", (unsigned long long) instr->addr,
 		 (unsigned long long)mtd->size);
-
 	printf("nand_chip->phys_erase_shift = 0x%012llx, "
 		 "len = %llu\n", (unsigned long long) chip->phys_erase_shift,
 		 (unsigned long long) instr->len);
+#endif //NAND_DEBUG
 	/* Start address must align on block boundary */
 	if (instr->addr & ((1 << chip->phys_erase_shift) - 1)) {
+	    printf("nand_erase: start = 0x%012llx, "
+		        "nand size=0x%012llx", (unsigned long long) instr->addr,
+		        (unsigned long long)mtd->size);
+	    printf("nand_chip->phys_erase_shift = 0x%012llx, "
+		        "len = %llu\n", (unsigned long long) chip->phys_erase_shift,
+		            (unsigned long long) instr->len);
 		printf("nand_erase: Unaligned address\n");
 		return -EINVAL;
 	}
 
 	/* Length must align on block boundary */
 	if (instr->len & ((1 << chip->phys_erase_shift) - 1)) {
+	    printf("nand_erase: start = 0x%012llx, "
+		        "nand size=0x%012llx", (unsigned long long) instr->addr,
+		        (unsigned long long)mtd->size);
+	    printf("nand_chip->phys_erase_shift = 0x%012llx, "
+		        "len = %llu\n", (unsigned long long) chip->phys_erase_shift,
+		            (unsigned long long) instr->len);
 		printf( "nand_erase: Length not block aligned\n");
 		return -EINVAL;
 	}
 
 	/* Do not allow erase past end of device */
 	if ((instr->len + instr->addr) > mtd->size) {
+	    printf("nand_erase: start = 0x%012llx, "
+		        "nand size=0x%012llx", (unsigned long long) instr->addr,
+		        (unsigned long long)mtd->size);
+	    printf("nand_chip->phys_erase_shift = 0x%012llx, "
+		        "len = %llu\n", (unsigned long long) chip->phys_erase_shift,
+		            (unsigned long long) instr->len);
 		printf( "nand_erase: Erase past end of device\n");
 		return -EINVAL;
 	}
@@ -2401,8 +2430,10 @@ int nand_erase_nand(struct mtd_info *mtd, struct erase_info *instr,
 		 */
 		if (nand_block_checkbad(mtd, ((loff_t) page) <<
 					chip->page_shift, 0, allowbbt)) {
+#ifdef NAND_DEBUG
 			printf("nand_erase: attempt to erase a "
 			       "bad block at page 0x%08x\n", page);
+#endif //NAND_DEBUG
 			instr->state = MTD_ERASE_FAILED;
 			goto erase_exit;
 		}

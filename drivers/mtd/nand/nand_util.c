@@ -131,9 +131,13 @@ int nand_erase_opts(nand_info_t *meminfo, const nand_erase_options_t *opts)
 
 
 		if (!opts->scrub && bbtest) {
+#ifdef NAND_DEBUG
         puts(" block_isbad is run\r\n");
+#endif //NAND_DEBUG
 			int ret = meminfo->block_isbad(meminfo, erase.addr);
+#ifdef NAND_DEBUG
         puts(" block_isbad is out\r\n");
+#endif //NAND_DEBUG
 			if (ret > 0) {
 				if (!opts->quiet)
 					printf("\rSkipping bad block at  "
