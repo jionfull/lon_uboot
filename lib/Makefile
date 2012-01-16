@@ -56,6 +56,7 @@ SRCS	:= $(COBJS:.o=.c)
 OBJS	:= $(addprefix $(obj),$(COBJS))
 
 $(LIB):	$(obj).depend $(OBJS)
+	@echo $(TOPDIP);
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
 #########################################################################

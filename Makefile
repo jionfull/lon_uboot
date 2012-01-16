@@ -282,6 +282,7 @@ __LIBS := $(subst $(obj),,$(LIBS)) $(subst $(obj),,$(LIBBOARD))
 ALL += $(obj)u-boot.srec $(obj)u-boot.bin $(obj)System.map $(U_BOOT_NAND) $(U_BOOT_ONENAND)
 
 all:		$(ALL)
+	@echo  "all is run"
 
 $(obj)u-boot.hex:	$(obj)u-boot
 		$(OBJCOPY) ${OBJCFLAGS} -O ihex $< $@
@@ -330,6 +331,8 @@ GEN_UBOOT = \
 			--start-group $(__LIBS) --end-group $(PLATFORM_LIBS) \
 			-Map u-boot.map -o u-boot
 $(obj)u-boot:	depend $(SUBDIRS) $(OBJS) $(LIBBOARD) $(LIBS) $(LDSCRIPT) $(obj)u-boot.lds
+		@echo "u-boot depend is run"
+		@echo TOPDIR
 		$(GEN_UBOOT)
 ifeq ($(CONFIG_KALLSYMS),y)
 		smap=`$(call SYSTEM_MAP,u-boot) | \
@@ -446,6 +449,8 @@ updater env depend dep tags ctags etags cscope $(obj)System.map:
 	@ exit 1
 
 tools:
+	@echo "tools depend is run"
+	@echo TOPDIR
 	$(MAKE) -C tools
 tools-all:
 	$(MAKE) -C tools HOST_TOOLS_ALL=y
@@ -2802,6 +2807,7 @@ at91sam9263ek_config	:	unconfig
 		echo "#define CONFIG_SYS_USE_BOOT_NORFLASH 1"	>>$(obj)include/config.h ; \
 		$(XECHO) "... and boot from NOR FLASH" ; \
 	fi;
+	@echo "go to run MKCONFIG"
 	@$(MKCONFIG) -a at91sam9263ek arm arm926ejs at91sam9263ek atmel at91
 
 at91sam9rlek_nandflash_config \

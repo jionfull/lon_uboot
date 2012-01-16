@@ -65,11 +65,14 @@ TARGETS	+= $(obj)eabi_compat.o
 endif
 
 all:	$(TARGETS)
+	@echo TOPDIR $(TOPDIR)
 
 $(LIB):	$(obj).depend $(OBJS)
+	@echo TOPDIR $(TOPDIR)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
 $(LIBGCC): $(obj).depend $(LGOBJS)
+	@echo TOPDIR $(TOPDIR)
 	$(AR) $(ARFLAGS) $@ $(LGOBJS)
 
 #########################################################################

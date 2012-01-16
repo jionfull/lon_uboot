@@ -35,6 +35,9 @@ START	:= $(addprefix $(obj),$(START))
 all:	$(obj).depend $(START) $(LIB)
 
 $(LIB):	$(OBJS)
+	@echo $(ARFLAGS)
+	@echo $(TOPDIR)
+	@echo $(SRCTREE)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
 #########################################################################

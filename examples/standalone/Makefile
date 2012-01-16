@@ -76,6 +76,7 @@ all:	$(obj).depend $(OBJS) $(LIB) $(SREC) $(BIN) $(ELF)
 
 #########################################################################
 $(LIB):	$(obj).depend $(LIBOBJS)
+	@echo TOPDIR
 		$(AR) $(ARFLAGS) $@ $(LIBOBJS)
 
 $(ELF):

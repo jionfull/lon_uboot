@@ -32,6 +32,7 @@ OBJS	:= $(addprefix $(obj),$(AOBJS) $(COBJS-y))
 all:	$(LIB) $(AOBJS)
 
 $(LIB):	$(obj).depend $(OBJS)
+	@echo TOPDIR
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
 

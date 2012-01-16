@@ -48,8 +48,10 @@ SRCS    := $(SOBJS-y:.o=.S) $(COBJS-y:.o=.c)
 OBJS    := $(addprefix $(obj),$(SOBJS-y) $(COBJS-y))
 
 all:	$(obj).depend $(LIB)
+	@echo $(TOPDIR)
 
 $(LIB):	$(OBJS)
+	@echo $(TOPDIR)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
 #########################################################################

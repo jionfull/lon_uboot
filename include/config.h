@@ -1,4 +1,4 @@
-#define CONFIG_SYS_USE_DATAFLASH 1
+#define CONFIG_SYS_USE_NANDFLASH 1
 
 /* Automatically generated - do not edit */
 #define CONFIG_BOARDDIR board/atmel/at91sam9263ek
