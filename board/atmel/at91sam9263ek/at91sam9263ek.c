@@ -146,12 +146,12 @@ static void at91sam9263ek_macb_hw_init(void)
 	writel((1 << 25) | (1 <<26), &pio->pioe.pudr);
     UartPuts("at919263_pioe_RunOk\r\n");
 
-	erstl = readl(&rstc->mr) & AT91_RSTC_MR_ERSTL_MASK;
+//	erstl = readl(&rstc->mr) & AT91_RSTC_MR_ERSTL_MASK;
 
 	/* Need to reset PHY -> 500ms reset */
-	writel(AT91_RSTC_KEY | AT91_RSTC_MR_ERSTL(0x0D) |
-		AT91_RSTC_MR_URSTEN, &rstc->mr);
-    UartPuts("at919263 RSTC KEY _RunOk\r\n");
+	//writel(AT91_RSTC_KEY | AT91_RSTC_MR_ERSTL(0x0D) |
+//		AT91_RSTC_MR_URSTEN, &rstc->mr);
+//   UartPuts("at919263 RSTC KEY _RunOk\r\n");
 
 //	writel(AT91_RSTC_KEY | AT91_RSTC_CR_EXTRST, &rstc->cr);
 //    UartPuts("while.reset _RunOk\r\n");
@@ -163,7 +163,7 @@ static void at91sam9263ek_macb_hw_init(void)
 //    while(1);
 
 	/* Restore NRST value */
-	writel(AT91_RSTC_KEY | erstl | AT91_RSTC_MR_URSTEN, &rstc->mr);
+//	writel(AT91_RSTC_KEY | erstl | AT91_RSTC_MR_URSTEN, &rstc->mr);
 
     UartPuts("at919263_Restore_RunOk\r\n");
 

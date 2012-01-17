@@ -68,7 +68,7 @@ void at91_macb_hw_init(void)
 	at91_set_a_periph(AT91_PIO_PORTE, 30, 0);	/* EMDIO */
 	at91_set_a_periph(AT91_PIO_PORTE, 29, 0);	/* EMDC */
 
-#ifndef CONFIG_RMII
+//#ifndef CONFIG_RMII
 	at91_set_a_periph(AT91_PIO_PORTE, 22, 0);	/* ECRS */
 	at91_set_b_periph(AT91_PIO_PORTC, 26, 0);	/* ECOL */
 	at91_set_b_periph(AT91_PIO_PORTC, 22, 0);	/* ERX2 */
@@ -77,7 +77,7 @@ void at91_macb_hw_init(void)
 	at91_set_b_periph(AT91_PIO_PORTC, 20, 0);	/* ETX2 */
 	at91_set_b_periph(AT91_PIO_PORTC, 21, 0);	/* ETX3 */
 	at91_set_b_periph(AT91_PIO_PORTC, 24, 0);	/* ETXER */
-#endif
+//#endif
 }
 #endif
 

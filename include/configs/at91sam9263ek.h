@@ -83,6 +83,10 @@
 #define CONFIG_BOOTP_BOOTPATH		1
 #define CONFIG_BOOTP_GATEWAY		1
 #define CONFIG_BOOTP_HOSTNAME		1
+/*
+ *CONFIG_ETHADDR 
+ */
+#define CONFIG_ETHADDR 01:02:03:04:05:06
 
 /*
  * Command line configuration.
